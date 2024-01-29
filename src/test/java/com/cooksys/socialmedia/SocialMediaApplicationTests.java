@@ -1,4 +1,4 @@
-package com.example.socialmedia;
+package com.cooksys.socialmedia;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
