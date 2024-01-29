@@ -24,9 +24,9 @@ public class User {
 	@GeneratedValue
 	private Long id;
 
-	private String username;
-
-	private String password;
+//	@Embedded
+//	@Column(nullable = false)
+//	private Credentials credentials;
 
 	@Embedded
 	@Column(nullable = false)
