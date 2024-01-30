@@ -3,6 +3,7 @@ package com.cooksys.socialmedia.entities;
 import java.sql.Timestamp;
 import java.util.Set;
 
+import com.cooksys.socialmedia.dtos.CredentialsDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -24,9 +25,9 @@ public class User {
 	@GeneratedValue
 	private Long id;
 
-//	@Embedded
-//	@Column(nullable = false)
-//	private Credentials credentials;
+	@Embedded
+	@Column(nullable = false)
+	private CredentialsDto credentials;
 
 	@Embedded
 	@Column(nullable = false)
