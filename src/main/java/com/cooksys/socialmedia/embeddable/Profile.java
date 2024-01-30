@@ -1,4 +1,4 @@
-package com.cooksys.socialmedia.entities;
+package com.cooksys.socialmedia.embeddable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

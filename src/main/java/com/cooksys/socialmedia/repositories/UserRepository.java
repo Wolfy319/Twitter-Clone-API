@@ -6,5 +6,6 @@ import com.cooksys.socialmedia.entities.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+    boolean existsByCredentialsUsername(String username);
 
 }

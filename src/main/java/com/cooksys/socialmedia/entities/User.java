@@ -1,19 +1,13 @@
 package com.cooksys.socialmedia.entities;
 
-import java.sql.Timestamp;
-import java.util.Set;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import com.cooksys.socialmedia.embeddable.Credentials;
+import com.cooksys.socialmedia.embeddable.Profile;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.sql.Timestamp;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -24,9 +18,9 @@ public class User {
 	@GeneratedValue
 	private Long id;
 
-//	@Embedded
-//	@Column(nullable = false)
-//	private Credentials credentials;
+	@Embedded
+	@Column(nullable = false)
+	private Credentials credentials;
 
 	@Embedded
 	@Column(nullable = false)
