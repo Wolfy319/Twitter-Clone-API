@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {@Override
 	}
 
 	@Override
-	public User createUser(UserRequestDto newUser) {
+	public UserResponseDto createUser(UserRequestDto newUser) {
 		// TODO Auto-generated method stub
 		return null;
 	}
