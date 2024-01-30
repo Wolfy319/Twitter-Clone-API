@@ -15,8 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class ValidateServiceImpl implements ValidateService {
 
     private final HashtagRepository hashtagRepository;
-    //TODO: Uncomment and test when existByUsername() is implemented
-//    private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
     /**
      * Checks if a hashtag with the specified label exists in the database.
@@ -29,26 +28,25 @@ public class ValidateServiceImpl implements ValidateService {
         return hashtagRepository.existsByLabel(label);
     }
 
-    //TODO: Uncomment and test when existByUsername() in UserRepository.java is implemented
-//    /**
-//     * Checks if a username exists in the system.
-//     *
-//     * @param username the username to check
-//     * @return true if the username exists, false otherwise
-//     */
-//    @Override
-//    public boolean usernameExists(String username) {
-//        return userRepository.existsByUsername(username);
-//    }
+    /**
+     * Checks if a username exists in the system.
+     *
+     * @param username the username to check
+     * @return true if the username exists, false otherwise
+     */
+    @Override
+    public boolean usernameExists(String username) {
+        return userRepository.existsByCredentialsUsername(username);
+    }
 
-//    /**
-//     * Checks if a username is available, meaning it does not exist in the system.
-//     *
-//     * @param username the username to check
-//     * @return true if the username is available (does not exist), false if it exists
-//     */
-//    @Override
-//    public boolean usernameAvailable(String username) {
-//        return !userRepository.existsByUsername(username);
-//    }
+    /**
+     * Checks if a username is available, meaning it does not exist in the system.
+     *
+     * @param username the username to check
+     * @return true if the username is available (does not exist), false if it exists
+     */
+    @Override
+    public boolean usernameAvailable(String username) {
+        return !userRepository.existsByCredentialsUsername(username);
+    }
 }

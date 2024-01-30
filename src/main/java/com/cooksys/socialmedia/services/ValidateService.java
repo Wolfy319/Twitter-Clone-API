@@ -13,20 +13,19 @@ public interface ValidateService {
      */
     boolean tagExists(String label);
 
-    //TODO: Uncomment and test when existByUsername() in UserRepository.java is implemented
-//    /**
-//     * Checks if a username exists in the system.
-//     *
-//     * @param username the username to check
-//     * @return true if the username exists, false otherwise
-//     */
-//    boolean usernameExists(String username);
-//
-//    /**
-//     * Checks if a username is available.
-//     *
-//     * @param username the username to check
-//     * @return true if the username is available, false otherwise
-//     */
-//    boolean usernameAvailable(String username);
+    /**
+     * Checks if a username exists in the system.
+     *
+     * @param username the username to check
+     * @return true if the username exists, false otherwise
+     */
+    boolean usernameExists(String username);
+
+    /**
+     * Checks if a username is available.
+     *
+     * @param username the username to check
+     * @return true if the username is available, false otherwise
+     */
+    boolean usernameAvailable(String username);
 }

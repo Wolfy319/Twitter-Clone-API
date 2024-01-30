@@ -2,7 +2,7 @@ package com.cooksys.socialmedia.dtos;
 
 import java.sql.Timestamp;
 
-import com.cooksys.socialmedia.entities.Profile;
+import com.cooksys.socialmedia.embeddable.Profile;
 
 import jakarta.persistence.Embedded;
 import lombok.Data;
