@@ -1,6 +1,5 @@
 package com.cooksys.socialmedia.dtos;
 
-import jakarta.persistence.Embeddable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +9,6 @@ import lombok.NoArgsConstructor;
  * Note: Password handling in this DTO is for demonstration. Always handle passwords securely in production.
  */
 @Data
-@Embeddable
 @NoArgsConstructor
 public class CredentialsDto {
 

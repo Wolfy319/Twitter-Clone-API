@@ -1,5 +1,6 @@
 package com.cooksys.socialmedia.embeddable;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,11 +18,13 @@ public class Credentials {
     /**
      * Unique username for a user.
      */
+	@Column(nullable = false, unique = true)
     private String username;
 
     /**
      * User's password. Used for login authentication.
      * Note: Stored as plain text here for simplicity, which is not secure for production.
      */
+	@Column(nullable = false)
     private String password;
 }

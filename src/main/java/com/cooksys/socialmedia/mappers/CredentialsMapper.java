@@ -1,14 +1,12 @@
 package com.cooksys.socialmedia.mappers;
 
+import org.mapstruct.Mapper;
+
 import com.cooksys.socialmedia.dtos.CredentialsDto;
 import com.cooksys.socialmedia.embeddable.Credentials;
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface CredentialsMapper {
-
-    CredentialsMapper INSTANCE = Mappers.getMapper(CredentialsMapper.class);
 
     CredentialsDto toDto(Credentials credentials);
 
