@@ -34,4 +34,12 @@ public class Hashtag {
      */
     @Column(nullable = false)
     private Timestamp lastUsed;
+
+//    @ManyToMany(mappedBy = "tweetHashtags")
+//    private List<Tweet> tweets;
+
 }
+
+
+
+
