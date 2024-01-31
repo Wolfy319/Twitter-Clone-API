@@ -3,6 +3,8 @@ package com.cooksys.socialmedia.entities;
 import java.sql.Timestamp;
 import java.util.Set;
 
+import com.cooksys.socialmedia.embeddable.Credentials;
+import com.cooksys.socialmedia.embeddable.Profile;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -24,9 +26,9 @@ public class User {
 	@GeneratedValue
 	private Long id;
 
-//	@Embedded
-//	@Column(nullable = false)
-//	private Credentials credentials;
+	@Embedded
+	@Column(nullable = false)
+	private Credentials credentials;
 
 	@Embedded
 	@Column(nullable = false)
@@ -51,18 +53,18 @@ public class User {
 			inverseJoinColumns = @JoinColumn(name = "follower_id"))
 	private Set<User> followers;
 	
-//	@ManyToMany 
-//	@JoinTable(
-//			name = "user_likes",
-//			joinColumns = @JoinColumn(name = "user_id"),
-//			inverseJoinColumns = @JoinColumn(name = "tweet_id"))
-//	private Set<Tweet> likedTweets;
+	@ManyToMany
+	@JoinTable(
+			name = "user_likes",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "tweet_id"))
+	private Set<Tweet> likedTweets;
 	
-//	@ManyToMany
-//	@JoinTable(
-//			name = "user_mentions",
-//			joinColumns = @JoinColumn(name = "user_id"),
-//			inverseJoinColumns = @JoinColumn(name = "tweet_id"))
-//	private Set<Tweet> mentionedTweets;
+	@ManyToMany
+	@JoinTable(
+			name = "user_mentions",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "tweet_id"))
+	private Set<Tweet> mentionedTweets;
 
 }
