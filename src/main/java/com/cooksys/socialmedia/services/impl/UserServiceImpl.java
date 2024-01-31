@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.cooksys.socialmedia.dtos.TweetResponseDto;
 import com.cooksys.socialmedia.dtos.UserRequestDto;
 import com.cooksys.socialmedia.dtos.UserResponseDto;
-//import com.cooksys.socialmedia.dtos.TweetResponseDto;
 import com.cooksys.socialmedia.entities.User;
 import com.cooksys.socialmedia.exceptions.BadRequestException;
 import com.cooksys.socialmedia.exceptions.NotFoundException;
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserResponseDto deleteUser(String username) {
-		// TODO Auto-generated method stub
+		User userToDelete = userRepository.findByCredentialsUsername(username)
 		return null;
 	}
 
@@ -87,23 +87,23 @@ public class UserServiceImpl implements UserService {
 
 	}
 
-//	@Override
-//	public List<TweetResponseDto> getFeed(String username) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public List<TweetResponseDto> getTweets(String username) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public List<TweetResponseDto> getMentions(String usernamea) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+	@Override
+	public List<TweetResponseDto> getFeed(String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TweetResponseDto> getTweets(String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TweetResponseDto> getMentions(String usernamea) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	@Override
 	public List<User> getFollowers(String username) {
