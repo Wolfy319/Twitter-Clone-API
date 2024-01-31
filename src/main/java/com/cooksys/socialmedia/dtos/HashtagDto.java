@@ -15,11 +15,6 @@ import java.sql.Timestamp;
 public class HashtagDto {
 
     /**
-     * The unique identifier of the hashtag.
-     */
-    private Long id;
-
-    /**
      * The unique, case-sensitive label of the hashtag.
      * Represents the text of the hashtag itself.
      */
