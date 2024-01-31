@@ -15,12 +15,13 @@ import com.cooksys.socialmedia.dtos.UserResponseDto;
 //import com.cooksys.socialmedia.dtos.TweetResponseDto;
 import com.cooksys.socialmedia.entities.User;
 import com.cooksys.socialmedia.services.UserService;
+import com.cooksys.socialmedia.services.ValidateService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 	private final UserService userService;
 	
@@ -35,7 +36,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/@{username}")
-	public UserResponseDto getUserByUsername(@PathVariable String username) {
+	public UserResponseDto getUserByUsername(@PathVariable("username") String username) {
 		return userService.getUserByUsername(username);
 	}
 	
