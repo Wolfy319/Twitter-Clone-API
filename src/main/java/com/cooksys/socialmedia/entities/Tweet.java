@@ -38,13 +38,13 @@ public class Tweet {
     private String content;
 
     @OneToMany(mappedBy = "inReplyTo")
-    private List<Tweet> replies;
+    private List<Tweet> replies = new ArrayList<>();
 
     @ManyToOne
     private Tweet inReplyTo;
 
     @OneToMany(mappedBy = "repostOf")
-    private List<Tweet> reposts;
+    private List<Tweet> reposts = new ArrayList<>();
 
     @ManyToOne
     private Tweet repostOf;

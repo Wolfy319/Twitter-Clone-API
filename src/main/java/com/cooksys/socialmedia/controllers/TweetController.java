@@ -2,18 +2,11 @@ package com.cooksys.socialmedia.controllers;
 
 import java.util.List;
 
+import com.cooksys.socialmedia.dtos.*;
+import com.cooksys.socialmedia.entities.Hashtag;
 import com.cooksys.socialmedia.services.TweetService;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.cooksys.socialmedia.dtos.UserRequestDto;
-import com.cooksys.socialmedia.dtos.UserResponseDto;
-import com.cooksys.socialmedia.dtos.TweetResponseDto;
 import com.cooksys.socialmedia.entities.User;
 import com.cooksys.socialmedia.services.UserService;
 
@@ -21,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/tweet")
+@RequestMapping("/tweets")
 public class TweetController {
 
     private final TweetService tweetService;
@@ -29,6 +22,11 @@ public class TweetController {
     @GetMapping
     public List<TweetResponseDto> getAllTweets() {
         return tweetService.getAllTweets();
+    }
+
+    @GetMapping("/{id}/tags")
+    public List<HashtagDto> getTags(@PathVariable long id) {
+        return tweetService.getTags(id);
     }
 
 }
