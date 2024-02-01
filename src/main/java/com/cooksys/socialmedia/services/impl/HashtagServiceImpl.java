@@ -1,19 +1,21 @@
 package com.cooksys.socialmedia.services.impl;
 
-// TODO: Uncomment and test when Tweets are implemented
-// import com.cooksys.socialmedia.dtos.TweetDto;
-// import com.cooksys.socialmedia.repositories.TweetRepository;
-// import com.cooksys.socialmedia.mappers.HashtagMapper;
+
 import com.cooksys.socialmedia.dtos.HashtagDto;
+import com.cooksys.socialmedia.dtos.TweetResponseDto;
 import com.cooksys.socialmedia.entities.Hashtag;
 import com.cooksys.socialmedia.mappers.HashtagMapper;
+import com.cooksys.socialmedia.mappers.TweetMapper;
 import com.cooksys.socialmedia.repositories.HashtagRepository;
+import com.cooksys.socialmedia.repositories.TweetRepository;
 import com.cooksys.socialmedia.services.HashtagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Implementation of the HashtagService interface.
@@ -25,9 +27,8 @@ public class HashtagServiceImpl implements HashtagService {
 
     private final HashtagRepository hashtagRepository;
     private final HashtagMapper hashtagMapper;
-    //TODO: Uncomment and test when Tweets are implemented
-//    private final TweetRepository tweetRepository;
-//    private final TweetMapper tweetMapper;
+    private final TweetRepository tweetRepository;
+    private final TweetMapper tweetMapper;
 
     /**
      * {@inheritDoc}
@@ -35,27 +36,20 @@ public class HashtagServiceImpl implements HashtagService {
     @Override
     public List<HashtagDto> getAllHashtags() {
         List<Hashtag> hashtags = hashtagRepository.findAll();
+
         return hashtags.stream()
                 .map(hashtagMapper::toDto)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
-    //TODO: Implement findByHashtags_LabelAndDeletedFalseOrderByPostedDesc() when Tweets are implemented
-    //TODO: Uncomment and test
-//    /**
-//     * {@inheritDoc}
-//     */
-//    @Override
-//    public List<TweetDto> getTweetsByHashtag(String label) {
-//        // Check if the hashtag exists
-//        if (!hashtagRepository.existsByLabel(label)) {
-//            throw new HashtagNotFoundException("Hashtag not found with label: " + label);
-//        }
-//
-//        // Fetch the tweets by the hashtag label, ensuring they are not deleted and ordered by posted date in descending order
-//        List<Tweet> tweets = tweetRepository.findByHashtags_LabelAndDeletedFalseOrderByPostedDesc(label);
-//        return tweets.stream()
-//                .map(tweetMapper::toDto) // Convert each Tweet entity to TweetDto
-//                .collect(Collectors.toList());
-//    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<List<TweetResponseDto>> getTweetsByHashtag(String label) {
+        return hashtagRepository.findByLabel(label)
+                .map(tweetRepository::findByHashtagsAndDeletedFalseOrderByPostedDesc)
+                .map(tweets -> tweets.stream().map(tweetMapper::entityToDto)
+                        .collect(toList()));
+    }
 }
