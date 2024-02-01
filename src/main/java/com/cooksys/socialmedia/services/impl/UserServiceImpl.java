@@ -91,8 +91,23 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void unfollowUser(String username, UserRequestDto follower) {
-		// TODO Auto-generated method stub
+	public void unfollowUser(String username, UserRequestDto followerRequest) {
+		User user = userRepository.findByCredentialsUsername(username);
+		User userToUnfollow = userRepository.findByCredentialsUsername(followerRequest.getCredentials().getUsername());
+		if(user == null) {
+			throw new NotFoundException("Credentials provided do not match any active user");
+		} else if(userToUnfollow == null || userToUnfollow.isDeleted()) {
+			throw new NotFoundException("No such followable user exists");
+		} else if(!user.getFollowing().contains(userToUnfollow)) {
+			throw new NotFoundException("Users do not share any relationship");
+		}
+		
+		List<User> following = user.getFollowing();
+		List<User> followers = userToUnfollow.getFollowers();
+		following.remove(userToUnfollow);
+		followers.remove(user);
+		userRepository.saveAndFlush(user);
+		userRepository.saveAndFlush(userToUnfollow);
 
 	}
 
@@ -114,9 +129,10 @@ public class UserServiceImpl implements UserService {
 			throw new NotFoundException("User doesn't exist!");
 		}
 		
-		List<Tweet> mentions = userRepository.findByCredentialsUsername(username).getMentionedTweets();
+		User user = userRepository.findByCredentialsUsername(username);
+		List<Tweet> mentionedTweets = user.getMentionedTweets();
 		List<Tweet> nonDeletedMentions = new ArrayList<>();
-		for(Tweet mentionedTweet : mentions) {
+		for(Tweet mentionedTweet : mentionedTweets) {
 			if(!mentionedTweet.isDeleted()) {
 				nonDeletedMentions.add(mentionedTweet);
 			}
