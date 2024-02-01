@@ -1,5 +1,7 @@
 package com.cooksys.socialmedia.services.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -7,12 +9,15 @@ import org.springframework.stereotype.Service;
 import com.cooksys.socialmedia.dtos.TweetResponseDto;
 import com.cooksys.socialmedia.dtos.UserRequestDto;
 import com.cooksys.socialmedia.dtos.UserResponseDto;
+import com.cooksys.socialmedia.entities.Tweet;
 import com.cooksys.socialmedia.entities.User;
 import com.cooksys.socialmedia.exceptions.BadRequestException;
 import com.cooksys.socialmedia.exceptions.NotFoundException;
+import com.cooksys.socialmedia.mappers.TweetMapper;
 import com.cooksys.socialmedia.mappers.UserMapper;
 import com.cooksys.socialmedia.repositories.UserRepository;
 import com.cooksys.socialmedia.services.UserService;
+import com.cooksys.socialmedia.utils.TweetTimestampComparator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 	private final UserMapper userMapper;
-
+	private final TweetMapper tweetMapper;
 	@Override
 	public List<UserResponseDto> getUsers() {
 		// TODO Auto-generated method stub
@@ -30,7 +35,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserResponseDto createUser(UserRequestDto newUserRequest) {
-		String username = newUserRequest.getCredentials().getUsername();
+		User newUser = userMapper.dtoToEntity(newUserRequest);
+		String username = newUser.getCredentials().getUsername();
 		User existingUser = userRepository.findByCredentialsUsername(username);
 		boolean userExists = existingUser != null;
 		// Throw an exception if any required field is missing
@@ -44,13 +50,12 @@ public class UserServiceImpl implements UserService {
 		}
 		// Reactivate user account if it exists in the DB but has been deleted
 		else if (userExists
-				&& existingUser.getCredentials().getPassword() == newUserRequest.getCredentials().getPassword()) {
+				&& newUser.getCredentials().equals(existingUser.getCredentials())) {
 			existingUser.setDeleted(false);
 			return userMapper.entityToDto(userRepository.saveAndFlush(existingUser));
 		}
 
 		// Create the new user
-		User newUser = userMapper.dtoToEntity(newUserRequest);
 		return userMapper.entityToDto(userRepository.saveAndFlush(newUser));
 	}
 
@@ -71,8 +76,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserResponseDto deleteUser(String username) {
-		User userToDelete = userRepository.findByCredentialsUsername(username)
-		return null;
+		User userToDelete = userRepository.findByCredentialsUsername(username);
+		if(userToDelete == null || userToDelete.isDeleted()) {
+			throw new BadRequestException("User doesn't exist!");
+		}
+		userToDelete.setDeleted(true);
+		return userMapper.entityToDto(userRepository.saveAndFlush(userToDelete));
 	}
 
 	@Override
@@ -101,8 +110,15 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<TweetResponseDto> getMentions(String usernamea) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Tweet> mentions = userRepository.findByCredentialsUsername(usernamea).getMentionedTweets();
+		List<Tweet> nonDeletedMentions = new ArrayList<>();
+		for(Tweet mentionedTweet : mentions) {
+			if(!mentionedTweet.isDeleted()) {
+				nonDeletedMentions.add(mentionedTweet);
+			}
+		}
+		Collections.sort(nonDeletedMentions, new TweetTimestampComparator());
+		return tweetMapper.entitiesToDtos(nonDeletedMentions);
 	}
 
 	@Override
