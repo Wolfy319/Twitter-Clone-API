@@ -109,8 +109,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<TweetResponseDto> getMentions(String usernamea) {
-		List<Tweet> mentions = userRepository.findByCredentialsUsername(usernamea).getMentionedTweets();
+	public List<TweetResponseDto> getMentions(String username) {
+		if(!userRepository.existsByCredentialsUsername(username)) {
+			throw new NotFoundException("User doesn't exist!");
+		}
+		
+		List<Tweet> mentions = userRepository.findByCredentialsUsername(username).getMentionedTweets();
 		List<Tweet> nonDeletedMentions = new ArrayList<>();
 		for(Tweet mentionedTweet : mentions) {
 			if(!mentionedTweet.isDeleted()) {
