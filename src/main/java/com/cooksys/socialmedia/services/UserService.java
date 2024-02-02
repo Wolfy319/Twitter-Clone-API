@@ -24,12 +24,12 @@ public interface UserService {
 	void unfollowUser(String username, UserRequestDto follower);
 	
 	List<TweetResponseDto> getFeed(String username);
-	
+
 	List<TweetResponseDto> getTweets(String username);
-	
+
 	List<TweetResponseDto> getMentions(String username);
 
 	List<User> getFollowers(String username);
 
-	List<User> getFollowing(String username);
+	List<UserResponseDto> getFollowing(String username);
 }

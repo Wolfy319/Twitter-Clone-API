@@ -27,4 +27,6 @@ public interface HashtagMapper {
      * @return the corresponding {@link Hashtag} entity
      */
     Hashtag toEntity(HashtagDto hashtagDto);
+
+    HashtagDto entityToDto(Hashtag hashtag);
 }
