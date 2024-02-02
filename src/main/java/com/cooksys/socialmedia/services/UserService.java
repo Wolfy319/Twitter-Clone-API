@@ -1,5 +1,6 @@
 package com.cooksys.socialmedia.services;
 
+import com.cooksys.socialmedia.dtos.CredentialsDto;
 import com.cooksys.socialmedia.dtos.TweetResponseDto;
 import com.cooksys.socialmedia.dtos.UserRequestDto;
 import com.cooksys.socialmedia.dtos.UserResponseDto;
@@ -17,9 +18,9 @@ public interface UserService {
 
 	UserResponseDto deleteUser(String username);
 
-	void followUser(String username, UserRequestDto newFollower);
+	void followUser(String username, CredentialsDto newFollower);
 
-	void unfollowUser(String username, UserRequestDto follower);
+	void unfollowUser(String username, CredentialsDto follower);
 	
 	List<TweetResponseDto> getFeed(String username);
 

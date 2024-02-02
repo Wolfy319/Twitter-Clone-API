@@ -27,3 +27,4 @@ nbdist/
 
 application.properties
 social-media-pman-collection.http
+socialmedia-collection.http

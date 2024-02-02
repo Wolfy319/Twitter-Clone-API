@@ -1,13 +1,24 @@
 package com.cooksys.socialmedia.controllers;
 
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.cooksys.socialmedia.dtos.CredentialsDto;
 import com.cooksys.socialmedia.dtos.TweetResponseDto;
 import com.cooksys.socialmedia.dtos.UserRequestDto;
 import com.cooksys.socialmedia.dtos.UserResponseDto;
 import com.cooksys.socialmedia.services.UserService;
-import java.util.List;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,13 +52,13 @@ public class UserController {
 	}
 
 	@PostMapping("/@{username}/follow")
-	public ResponseEntity<Void> followUser(@PathVariable("username") String username, @RequestBody UserRequestDto newFollower) {
+	public ResponseEntity<Void> followUser(@PathVariable("username") String username, @RequestBody CredentialsDto newFollower) {
 		userService.followUser(username, newFollower);
 		return ResponseEntity.ok().build();
 	}
 	
 	@PostMapping("/@{username}/unfollow")
-	public void unfollowUser(@PathVariable("username") String username, @RequestBody UserRequestDto follower) {
+	public void unfollowUser(@PathVariable("username") String username, @RequestBody CredentialsDto follower) {
 		userService.unfollowUser(username, follower);
 	}
 	

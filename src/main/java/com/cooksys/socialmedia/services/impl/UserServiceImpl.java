@@ -15,9 +15,8 @@ import com.cooksys.socialmedia.repositories.UserRepository;
 import com.cooksys.socialmedia.services.UserService;
 import com.cooksys.socialmedia.services.ValidateService;
 import com.cooksys.socialmedia.utils.TweetTimestampComparator;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+
+import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -89,8 +88,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void followUser(String username, UserRequestDto followerDto) {
-        User follower = userRepository.findByCredentials_Username(followerDto.getCredentials().getUsername())
+    public void followUser(String username, CredentialsDto followerDto) {
+    	if(followerDto == null || followerDto.getUsername() == null || followerDto.getPassword() == null) {
+    		throw new BadRequestException("Credentials include errors or were not sent");
+    	}
+
+        User follower = userRepository.findByCredentials_Username(followerDto.getUsername())
                 .filter(user -> !user.isDeleted())
                 .orElseThrow(() -> new NotFoundException("Follower user not found or not active"));
 
@@ -110,9 +113,13 @@ public class UserServiceImpl implements UserService {
     }
 
 	@Override
-	public void unfollowUser(String username, UserRequestDto followerRequest) {
+	public void unfollowUser(String username, CredentialsDto followerRequest) {
 		User user = userRepository.findByCredentialsUsername(username);
-		User userToUnfollow = userRepository.findByCredentialsUsername(followerRequest.getCredentials().getUsername());
+    	if(followerRequest == null || followerRequest.getUsername() == null || followerRequest.getPassword() == null) {
+    		throw new BadRequestException("Credentials include errors or were not sent");
+    	}
+
+		User userToUnfollow = userRepository.findByCredentialsUsername(followerRequest.getUsername());
 		if(user == null) {
 			throw new NotFoundException("Credentials provided do not match any active user");
 		} else if(userToUnfollow == null || userToUnfollow.isDeleted()) {
@@ -132,7 +139,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<TweetResponseDto> getFeed(String username) {
-        return List.of();
+
+        Optional<User> optionalUser = userRepository.findByCredentialsUsernameAndDeletedFalse(username);
+
+        if (optionalUser.isEmpty()) {
+            throw new NotFoundException("User not found or deleted");
+        }
+
+        User user = optionalUser.get();
+
+        List<Tweet> userTweets = user.getTweets().stream()
+                .filter(tweet -> !tweet.isDeleted())
+                .collect(Collectors.toList());
+
+        List<User> followedUsers = user.getFollowing();
+
+        for (User followedUser : followedUsers) {
+            userTweets.addAll(followedUser.getTweets().stream()
+                    .filter(tweet -> !tweet.isDeleted())
+                    .toList());
+        }
+
+        return userTweets.stream()
+                .map(tweetMapper::entityToDto)
+                .sorted(Comparator.comparing(TweetResponseDto::getPosted).reversed())
+                .collect(Collectors.toList());
     }
 
     @Override
