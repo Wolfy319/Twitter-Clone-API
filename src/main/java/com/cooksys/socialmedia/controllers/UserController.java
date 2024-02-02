@@ -2,6 +2,7 @@ package com.cooksys.socialmedia.controllers;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -50,11 +51,13 @@ public class UserController {
 	public UserResponseDto deleteUser(@PathVariable("username") String username) {
 		return userService.deleteUser(username);
 	}
-	
-	@PostMapping("/@{username}/follow") 
-	public void followUser(@PathVariable("username") String username, @RequestBody UserRequestDto newFollower) {
+
+	@PostMapping("/@{username}/follow")
+	public ResponseEntity<Void> followUser(@PathVariable("username") String username, @RequestBody UserRequestDto newFollower) {
 		userService.followUser(username, newFollower);
+		return ResponseEntity.ok().build();
 	}
+
 	
 	@PostMapping("/@{username}/unfollow")
 	public void unfollowUser(@PathVariable("username") String username, @RequestBody UserRequestDto follower) {
@@ -75,11 +78,13 @@ public class UserController {
 	public List<TweetResponseDto> getMentions(@PathVariable("username") String username) {
 		return userService.getMentions(username);
 	}
-	
-	@GetMapping("/@{username}/followers") 
-	public List<User> getFollowers(@PathVariable("username") String username) {
-		return userService.getFollowers(username);
+
+	@GetMapping("/users/@{username}/followers")
+	public ResponseEntity<List<UserResponseDto>> getUserFollowers(@PathVariable String username) {
+		List<UserResponseDto> followers = userService.getFollowersByUsername(username);
+		return followers.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(followers);
 	}
+
 	
 	@GetMapping("/@{username}/following") 
 	public List<UserResponseDto> getFollowing(@PathVariable("username") String username) {
