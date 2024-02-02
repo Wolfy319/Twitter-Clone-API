@@ -56,12 +56,12 @@ public class TweetController {
     }
 
     @GetMapping("/{id}/tags")
-    public List<HashtagDto> getTags(@PathVariable long id) {
+    public List<HashtagDto> getTags(@PathVariable Long id) {
         return tweetService.getTags(id);
     }
 
     @GetMapping("/{id}/reposts")
-    public List<TweetResponseDto> getReposts(@PathVariable long id) {
+    public List<TweetResponseDto> getReposts(@PathVariable Long id) {
         return tweetService.getReposts(id);
     }
 
@@ -70,4 +70,13 @@ public class TweetController {
         return tweetService.getMentions(id);
     }
 
+    @PostMapping("/{id}/like")
+    public void likeTweet(@PathVariable Long id, @RequestBody Credentials credentials) {
+        tweetService.likeTweet(id, credentials);
+    }
+
+    @DeleteMapping("/{id}")
+    public TweetResponseDto deleteTweet(@PathVariable Long id, CredentialsDto credentials) {
+        return tweetService.deleteTweet(id, credentials);
+    }
 }

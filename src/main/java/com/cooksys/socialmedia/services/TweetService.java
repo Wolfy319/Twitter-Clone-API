@@ -1,5 +1,6 @@
 package com.cooksys.socialmedia.services;
 
+import com.cooksys.socialmedia.dtos.CredentialsDto;
 import com.cooksys.socialmedia.dtos.HashtagDto;
 import com.cooksys.socialmedia.dtos.TweetRequestDto;
 import com.cooksys.socialmedia.dtos.TweetResponseDto;
@@ -18,13 +19,17 @@ public interface TweetService {
 
 	TweetResponseDto repostTweet(Long id, Credentials credentials);
 
-    List<HashtagDto> getTags(long id);
+    List<HashtagDto> getTags(Long id);
 
-    List<TweetResponseDto> getReposts(long id);
-
-    List<UserResponseDto> getMentions(Long id);
+    List<TweetResponseDto> getReposts(Long id);
 
     TweetResponseDto createTweet(TweetRequestDto tweetRequestDto);
 
     Optional<TweetResponseDto> getTweetById(Long id);
+
+    List<UserResponseDto> getMentions(Long id);
+
+    void likeTweet(Long id, Credentials credentials);
+
+    TweetResponseDto deleteTweet(Long id, CredentialsDto credentials);
 }

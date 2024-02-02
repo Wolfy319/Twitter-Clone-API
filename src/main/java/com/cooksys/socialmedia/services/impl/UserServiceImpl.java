@@ -43,9 +43,7 @@ public class UserServiceImpl implements UserService {
 
         List<User> users = userRepository.findByDeletedFalse();
 
-        List<UserResponseDto> userResponseDtos = userMapper.entitiesToDtos(users);
-
-        return userResponseDtos;
+        return userMapper.entitiesToDtos(users);
     }
 
     @Override
@@ -193,13 +191,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getFollowers(String username) {
-        return List.of();
+    public List<UserResponseDto> getFollowers(String username) {
+
+        User user = userRepository.findByCredentialsUsername(username);
+
+        if (user == null || user.isDeleted()) {
+            throw new NotFoundException("User not found");
+        }
+
+        List<User> followers = user.getFollowers();
+
+        return followers.stream()
+                .map(userMapper::entityToDto)
+                .collect(Collectors.toList());
     }
 
     public List<UserResponseDto> getFollowing(String username) {
 
         User user = userRepository.findByCredentialsUsername(username);
+
         if (user == null || user.isDeleted()) {
             throw new NotFoundException("User not found");
         }

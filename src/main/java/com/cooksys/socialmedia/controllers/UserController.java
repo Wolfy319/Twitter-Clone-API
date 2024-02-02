@@ -57,7 +57,6 @@ public class UserController {
 		userService.followUser(username, newFollower);
 		return ResponseEntity.ok().build();
 	}
-
 	
 	@PostMapping("/@{username}/unfollow")
 	public void unfollowUser(@PathVariable("username") String username, @RequestBody UserRequestDto follower) {
@@ -79,12 +78,11 @@ public class UserController {
 		return userService.getMentions(username);
 	}
 
-	@GetMapping("/users/@{username}/followers")
+	@GetMapping("/@{username}/followers")
 	public ResponseEntity<List<UserResponseDto>> getUserFollowers(@PathVariable String username) {
 		List<UserResponseDto> followers = userService.getFollowersByUsername(username);
 		return followers.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(followers);
 	}
-
 	
 	@GetMapping("/@{username}/following") 
 	public List<UserResponseDto> getFollowing(@PathVariable("username") String username) {
