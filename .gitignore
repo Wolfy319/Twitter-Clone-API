@@ -23,4 +23,5 @@ dist/
 nbdist/
 .nb-gradle/
 
+social-media-pman-collection.http
 application.properties

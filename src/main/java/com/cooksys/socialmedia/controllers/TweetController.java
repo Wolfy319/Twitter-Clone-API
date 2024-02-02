@@ -3,6 +3,7 @@ package com.cooksys.socialmedia.controllers;
 import java.util.List;
 
 import com.cooksys.socialmedia.services.TweetService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -27,8 +28,9 @@ public class TweetController {
     private final TweetService tweetService;
 
     @GetMapping
-    public List<TweetResponseDto> getAllTweets() {
-        return tweetService.getAllTweets();
+    public ResponseEntity<List<TweetResponseDto>> getAllTweets() {
+        List<TweetResponseDto> tweets = tweetService.getAllTweets();
+        return ResponseEntity.ok(tweets);
     }
 
 }
