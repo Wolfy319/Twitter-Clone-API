@@ -66,7 +66,7 @@ public class TweetServiceImpl implements TweetService {
     }
 
     @Override
-    public List<HashtagDto> getTags(long id) {
+    public List<HashtagDto> getTags(Long id) {
 
         Tweet tweet = tweetRepository.findById(id).orElseThrow(() -> new NotFoundException("Tweet not found"));
 
@@ -80,7 +80,7 @@ public class TweetServiceImpl implements TweetService {
     }
 
     @Override
-    public List<TweetResponseDto> getReposts(long id) {
+    public List<TweetResponseDto> getReposts(Long id) {
 
         Tweet tweet = tweetRepository.findById(id).orElseThrow(() -> new NotFoundException("Tweet not found"));
 
@@ -93,8 +93,8 @@ public class TweetServiceImpl implements TweetService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<UserResponseDto> getMentions(long id) {
+	@Override
+    public List<UserResponseDto> getMentions(Long id) {
 
         Tweet tweet = tweetRepository.findById(id).orElseThrow(() -> new NotFoundException("Tweet not found"));
 
@@ -104,7 +104,7 @@ public class TweetServiceImpl implements TweetService {
     }
 
 	@Override
-	public void likeTweet(long id, Credentials credentials) {
+	public void likeTweet(Long id, Credentials credentials) {
 
 		Tweet tweet = tweetRepository.findById(id).orElseThrow(() -> new NotFoundException("Tweet not found"));
 
@@ -126,7 +126,7 @@ public class TweetServiceImpl implements TweetService {
 	}
 
 	@Override
-	public TweetResponseDto deleteTweet(long id, CredentialsDto credentials) {
+	public TweetResponseDto deleteTweet(Long id, CredentialsDto credentials) {
 
 		Tweet tweet = tweetRepository.findById(id).orElseThrow(() -> new NotFoundException("Tweet not found"));
 

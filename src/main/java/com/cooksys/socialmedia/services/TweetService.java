@@ -17,13 +17,13 @@ public interface TweetService {
 
 	TweetResponseDto repostTweet(Long id, Credentials credentials);
 
-    List<HashtagDto> getTags(long id);
+    List<HashtagDto> getTags(Long id);
 
-    List<TweetResponseDto> getReposts(long id);
+    List<TweetResponseDto> getReposts(Long id);
 
-    List<UserResponseDto> getMentions(long id);
+    List<UserResponseDto> getMentions(Long id);
 
-    void likeTweet(long id, Credentials credentials);
+    void likeTweet(Long id, Credentials credentials);
 
-    TweetResponseDto deleteTweet(long id, CredentialsDto credentials);
+    TweetResponseDto deleteTweet(Long id, CredentialsDto credentials);
 }
