@@ -2,10 +2,9 @@ package com.cooksys.socialmedia.services;
 
 import java.util.List;
 
+import com.cooksys.socialmedia.dtos.TweetResponseDto;
 import com.cooksys.socialmedia.dtos.UserRequestDto;
 import com.cooksys.socialmedia.dtos.UserResponseDto;
-import com.cooksys.socialmedia.dtos.TweetResponseDto;
-import com.cooksys.socialmedia.entities.Tweet;
 import com.cooksys.socialmedia.entities.User;
 
 public interface UserService {
@@ -23,16 +22,14 @@ public interface UserService {
 	void followUser(String username, UserRequestDto newFollower);
 
 	void unfollowUser(String username, UserRequestDto follower);
-
+	
 	List<TweetResponseDto> getFeed(String username);
-//	
-//	List<TweetResponseDto> getTweets(String username);
-//	
-//	List<TweetResponseDto> getMentions(String usernamea);
+
+	List<TweetResponseDto> getTweets(String username);
+
+	List<TweetResponseDto> getMentions(String username);
 
 	List<User> getFollowers(String username);
 
-	List<User> getFollowing(String username);
-
-	List<TweetResponseDto> getTweets(String username);
+	List<UserResponseDto> getFollowing(String username);
 }

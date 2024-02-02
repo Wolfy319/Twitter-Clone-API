@@ -2,6 +2,7 @@ package com.cooksys.socialmedia.services.impl;
 
 import com.cooksys.socialmedia.dtos.HashtagDto;
 import com.cooksys.socialmedia.dtos.TweetResponseDto;
+import com.cooksys.socialmedia.dtos.UserResponseDto;
 import com.cooksys.socialmedia.entities.Hashtag;
 import com.cooksys.socialmedia.entities.Tweet;
 import com.cooksys.socialmedia.exceptions.NotFoundException;
@@ -36,7 +37,14 @@ public class TweetServiceImpl implements TweetService {
 
     @Override
     public List<TweetResponseDto> getAllTweets() {
-        return null;
+
+        List<Tweet> allTweets = tweetRepository.findAll();
+
+        List<TweetResponseDto> tweetResponseDtos = allTweets.stream()
+                .map(tweetMapper::entityToDto)
+                .collect(Collectors.toList());
+
+        return tweetResponseDtos;
     }
 
     @Override
@@ -46,6 +54,26 @@ public class TweetServiceImpl implements TweetService {
 
         return tweet.getHashtags().stream()
                 .map(hashtagMapper::entityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TweetResponseDto> getReposts(long id) {
+
+        Tweet tweet = tweetRepository.findById(id).orElseThrow(() -> new NotFoundException("Tweet not found"));
+
+        return tweet.getReposts().stream()
+                .map(tweetMapper::entityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserResponseDto> getMentions(long id) {
+
+        Tweet tweet = tweetRepository.findById(id).orElseThrow(() -> new NotFoundException("Tweet not found"));
+
+        return tweet.getMentionedUsers().stream()
+                .map(userMapper::entityToDto)
                 .collect(Collectors.toList());
     }
 }

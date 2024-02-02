@@ -20,4 +20,13 @@ public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
      * @return true if an entity with the given label exists, false otherwise
      */
     boolean existsByLabel(String label);
+
+    /**
+     * Finds a hashtag by its label.
+     *
+     * @param label the label of the hashtag to find
+     * @return an {@link Optional} containing the {@link Hashtag} if found, or empty if not
+     */
+    Optional<Hashtag> findByLabel(String label);
+
 }

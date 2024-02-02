@@ -1,9 +1,10 @@
 package com.cooksys.socialmedia.services;
 
 import com.cooksys.socialmedia.dtos.HashtagDto;
+import com.cooksys.socialmedia.dtos.TweetResponseDto;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 /**
  * Service interface for managing hashtags.
@@ -18,12 +19,11 @@ public interface HashtagService {
      */
     List<HashtagDto> getAllHashtags();
 
-    //TODO: Uncomment and test when Tweets are implemented
-//    /**
-//     * Retrieves all tweets tagged with a specific hashtag.
-//     *
-//     * @param label the label of the hashtag
-//     * @return a list of {@link TweetDto} objects representing all tweets associated with the hashtag
-//     */
-//    List<TweetDto> getTweetsByHashtag(String label);
+    /**
+     * Retrieves all tweets tagged with a specific hashtag.
+     *
+     * @param label the label of the hashtag
+     * @return a list of {@link TweetResponseDto} objects representing all tweets associated with the hashtag
+     */
+    Optional<List<TweetResponseDto>> getTweetsByHashtag(String label);
 }

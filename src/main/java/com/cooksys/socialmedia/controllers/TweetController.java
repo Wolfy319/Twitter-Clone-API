@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.cooksys.socialmedia.dtos.*;
 import com.cooksys.socialmedia.entities.Hashtag;
+import com.cooksys.socialmedia.entities.Tweet;
 import com.cooksys.socialmedia.services.TweetService;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,16 @@ public class TweetController {
     @GetMapping("/{id}/tags")
     public List<HashtagDto> getTags(@PathVariable long id) {
         return tweetService.getTags(id);
+    }
+
+    @GetMapping("/{id}/reposts")
+    public List<TweetResponseDto> getReposts(@PathVariable long id) {
+        return tweetService.getReposts(id);
+    }
+
+    @GetMapping("/{id}/mentions")
+    public List<UserResponseDto> getMentions(@PathVariable long id) {
+        return tweetService.getMentions(id);
     }
 
 }
