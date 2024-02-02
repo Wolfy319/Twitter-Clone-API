@@ -1,9 +1,6 @@
 package com.cooksys.socialmedia.services.impl;
 
-import com.cooksys.socialmedia.dtos.CredentialsDto;
-import com.cooksys.socialmedia.dtos.TweetResponseDto;
-import com.cooksys.socialmedia.dtos.UserRequestDto;
-import com.cooksys.socialmedia.dtos.UserResponseDto;
+import com.cooksys.socialmedia.dtos.*;
 import com.cooksys.socialmedia.embeddable.Credentials;
 import com.cooksys.socialmedia.entities.Tweet;
 import com.cooksys.socialmedia.entities.User;
@@ -14,6 +11,7 @@ import com.cooksys.socialmedia.mappers.UserMapper;
 import com.cooksys.socialmedia.repositories.TweetRepository;
 import com.cooksys.socialmedia.repositories.UserRepository;
 import com.cooksys.socialmedia.services.UserService;
+import com.cooksys.socialmedia.services.ValidateService;
 import com.cooksys.socialmedia.utils.TweetTimestampComparator;
 
 import lombok.RequiredArgsConstructor;
@@ -32,8 +30,8 @@ import static java.util.stream.Collectors.toList;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    @Autowired
-    private UserRepository userRepository;
+
+    private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final TweetMapper tweetMapper;
     private final TweetRepository tweetRepository;
@@ -166,12 +164,6 @@ public class UserServiceImpl implements UserService {
         }
         return tweetResponseDtos;
     }
-//
-//	@Override
-//	public List<TweetResponseDto> getMentions(String usernamea) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
 
     @Override
     public List<TweetResponseDto> getMentions(String username) {

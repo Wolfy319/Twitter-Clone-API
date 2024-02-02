@@ -30,9 +30,8 @@ public class HashtagController {
      * @return a ResponseEntity containing a list of all hashtags (HashtagDto)
      */
     @GetMapping
-    public ResponseEntity<List<HashtagDto>> getAllHashtags() {
-        List<HashtagDto> hashtags = hashtagService.getAllHashtags();
-        return ResponseEntity.ok(hashtags);
+    public List<HashtagDto> getAllHashtags() {
+        return hashtagService.getAllHashtags();
     }
 
     /**
@@ -44,12 +43,10 @@ public class HashtagController {
      * @return a ResponseEntity containing a list of tweets (TweetResponseDto) tagged with the hashtag
      */
     @GetMapping("/{label}")
-    public ResponseEntity<List<TweetResponseDto>> getTweetsByHashtag(@PathVariable String label) {
-        List<TweetResponseDto> tweets = hashtagService.getTweetsByHashtag(label)
-                .orElseThrow(() -> new NotFoundException(
-                "Hashtag not found with label: '" + label + "'. Hint: Use '%23' for '#' in hashtags, e.g., /tags/%23mario."
-        ));
-
-        return ResponseEntity.ok(tweets);
+    public List<TweetResponseDto> getTweetsByHashtag(@PathVariable String label) {
+        return hashtagService.getTweetsByHashtag(label)
+            .orElseThrow(() -> new NotFoundException(
+                    "Hashtag not found with label: '" + label + "'. Hint: Use '%23' for '#' in hashtags, e.g., /tags/%23mario."
+            ));
     }
 }

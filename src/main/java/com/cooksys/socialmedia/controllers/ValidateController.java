@@ -19,33 +19,33 @@ public class ValidateController {
      * Checks whether a hashtag with the given label exists.
      *
      * @param label the label of the hashtag
-     * @return ResponseEntity containing true if the hashtag exists, false otherwise
+     * @return Response containing true if the hashtag exists, false otherwise
      */
     @GetMapping("/tag/exists/{label}")
-    public ResponseEntity<Boolean> tagExists(@PathVariable String label) {
-        return ResponseEntity.ok(validateService.tagExists(label));
+    public Boolean tagExists(@PathVariable String label) {
+        return validateService.tagExists(label);
     }
 
     /**
      * Checks whether a username exists in the system.
      *
      * @param username the username to check
-     * @return ResponseEntity containing true if the username exists, false otherwise
+     * @return Response containing true if the username exists, false otherwise
      */
     @GetMapping("/username/exists/@{username}")
-    public ResponseEntity<Boolean> usernameExists(@PathVariable String username) {
-        return ResponseEntity.ok(validateService.usernameExists(username));
+    public Boolean usernameExists(@PathVariable String username) {
+        return validateService.usernameExists(username);
     }
 
     /**
      * Checks whether a username is available.
      *
      * @param username the username to check
-     * @return ResponseEntity containing true if the username is available, false otherwise
+     * @return Response containing true if the username is available, false otherwise
      */
     @GetMapping("/username/available/@{username}")
-    public ResponseEntity<Boolean> usernameAvailable(@PathVariable String username) {
-        return ResponseEntity.ok(validateService.usernameAvailable(username));
+    public Boolean usernameAvailable(@PathVariable String username) {
+        return validateService.usernameAvailable(username);
     }
 
 }
