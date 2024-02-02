@@ -1,5 +1,6 @@
 package com.cooksys.socialmedia.services;
 
+import com.cooksys.socialmedia.dtos.ContextDto;
 import com.cooksys.socialmedia.dtos.HashtagDto;
 import com.cooksys.socialmedia.dtos.TweetResponseDto;
 import com.cooksys.socialmedia.dtos.UserResponseDto;
@@ -21,4 +22,6 @@ public interface TweetService {
     List<TweetResponseDto> getReposts(long id);
 
     List<UserResponseDto> getMentions(Long id);
+
+	ContextDto getContext(Long id);
 }

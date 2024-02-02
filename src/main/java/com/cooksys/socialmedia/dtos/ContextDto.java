@@ -2,6 +2,7 @@ package com.cooksys.socialmedia.dtos;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
  * and the chain of replies that followed the target tweet (after).
  */
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class ContextDto {
 	private TweetResponseDto target;

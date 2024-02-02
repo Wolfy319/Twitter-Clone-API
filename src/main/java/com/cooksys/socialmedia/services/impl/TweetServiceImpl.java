@@ -1,5 +1,6 @@
 package com.cooksys.socialmedia.services.impl;
 
+import com.cooksys.socialmedia.dtos.ContextDto;
 import com.cooksys.socialmedia.dtos.HashtagDto;
 import com.cooksys.socialmedia.dtos.TweetResponseDto;
 import com.cooksys.socialmedia.dtos.UserResponseDto;
@@ -143,5 +144,30 @@ public class TweetServiceImpl implements TweetService {
 		repost.setAuthor(null);
 
 		return tweetMapper.entityToDto(tweetRepository.saveAndFlush(repost));
+	}
+
+	@Override
+	public ContextDto getContext(Long id) {
+		Tweet target = tweetRepository.getReferenceById(id);
+		if(target == null || target.isDeleted()) {
+			throw new NotFoundException("ID provided does not match any stored tweets");
+		}
+		
+		List<Tweet> before = new ArrayList<>();
+		Tweet previousTweet = target.getInReplyTo();
+		while(previousTweet != null) {
+			before.add(previousTweet);
+			previousTweet = previousTweet.getInReplyTo();
+		}
+		
+		List<Tweet> after = new ArrayList<>();
+		List<Tweet> replyTree = new ArrayList<>(target.getReplies());
+		for(Tweet reply : replyTree) {
+			if(!reply.isDeleted()) {
+				after.add(reply);
+				replyTree.addAll(reply.getReplies());
+			}
+		}
+		return new ContextDto(tweetMapper.entityToDto(target), tweetMapper.entitiesToDtos(before), tweetMapper.entitiesToDtos(after));
 	}
 }
