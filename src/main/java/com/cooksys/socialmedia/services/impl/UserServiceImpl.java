@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final TweetMapper tweetMapper;
     private final TweetRepository tweetRepository;
-
+    
     @Override
     public List<UserResponseDto> getUsers() {
 
@@ -90,8 +90,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void followUser(String username, UserRequestDto followerDto) {
-        User follower = userRepository.findByCredentials_Username(followerDto.getCredentials().getUsername())
+    public void followUser(String username, CredentialsDto followerDto) {
+    	if(followerDto == null || followerDto.getUsername() == null || followerDto.getPassword() == null) {
+    		throw new BadRequestException("Credentials include errors or were not sent");
+    	}
+    	
+        User follower = userRepository.findByCredentials_Username(followerDto.getUsername())
                 .filter(user -> !user.isDeleted())
                 .orElseThrow(() -> new NotFoundException("Follower user not found or not active"));
 
@@ -111,9 +115,13 @@ public class UserServiceImpl implements UserService {
     }
 
 	@Override
-	public void unfollowUser(String username, UserRequestDto followerRequest) {
+	public void unfollowUser(String username, CredentialsDto followerRequest) {
 		User user = userRepository.findByCredentialsUsername(username);
-		User userToUnfollow = userRepository.findByCredentialsUsername(followerRequest.getCredentials().getUsername());
+    	if(followerRequest == null || followerRequest.getUsername() == null || followerRequest.getPassword() == null) {
+    		throw new BadRequestException("Credentials include errors or were not sent");
+    	}
+    	
+		User userToUnfollow = userRepository.findByCredentialsUsername(followerRequest.getUsername());
 		if(user == null) {
 			throw new NotFoundException("Credentials provided do not match any active user");
 		} else if(userToUnfollow == null || userToUnfollow.isDeleted()) {
