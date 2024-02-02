@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.cooksys.socialmedia.entities.User;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -13,9 +14,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByDeletedFalse();
 
-    User findByCredentials_Username(String username);
     User findByCredentialsUsername(String username);
 
-    User findByCredentialsUsernameAndDeletedFalse(String username);
+    Optional<User> findByCredentialsUsernameAndDeletedFalse(String username);
+
+    Optional<User> findByCredentials_Username(String username);
 
 }

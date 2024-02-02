@@ -8,21 +8,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.cooksys.socialmedia.dtos.*;
-import com.cooksys.socialmedia.entities.Hashtag;
-import com.cooksys.socialmedia.entities.Tweet;
-import com.cooksys.socialmedia.services.TweetService;
-import org.springframework.web.bind.annotation.*;
 
+import com.cooksys.socialmedia.dtos.ContextDto;
+import com.cooksys.socialmedia.dtos.CredentialsDto;
+import com.cooksys.socialmedia.dtos.HashtagDto;
+import com.cooksys.socialmedia.dtos.TweetRequestDto;
 import com.cooksys.socialmedia.dtos.TweetResponseDto;
 import com.cooksys.socialmedia.dtos.UserResponseDto;
 import com.cooksys.socialmedia.embeddable.Credentials;
-import com.cooksys.socialmedia.entities.Tweet;
 import com.cooksys.socialmedia.services.TweetService;
-import com.cooksys.socialmedia.entities.User;
-import com.cooksys.socialmedia.services.UserService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,8 +34,22 @@ public class TweetController {
     private final TweetService tweetService;
 
     @GetMapping
-    public List<TweetResponseDto> getAllTweets() {
-        return tweetService.getAllTweets();
+    public ResponseEntity<List<TweetResponseDto>> getAllTweets() {
+        List<TweetResponseDto> tweets = tweetService.getAllTweets();
+        return ResponseEntity.ok(tweets);
+    }
+
+    @PostMapping
+    public ResponseEntity<TweetResponseDto> createTweet(@RequestBody TweetRequestDto tweetRequestDto) {
+        TweetResponseDto createdTweet = tweetService.createTweet(tweetRequestDto);
+        return new ResponseEntity<>(createdTweet, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TweetResponseDto> getTweetById(@PathVariable Long id) {
+        Optional<TweetResponseDto> tweetDto = tweetService.getTweetById(id);
+        return tweetDto.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{id}/likes")
@@ -66,6 +82,11 @@ public class TweetController {
         return tweetService.getMentions(id);
     }
 
+    @GetMapping("/{id}/context")
+    public ContextDto getContext(@PathVariable Long id) {
+    	return tweetService.getContext(id);
+    }
+    
     @PostMapping("/{id}/like")
     public void likeTweet(@PathVariable Long id, @RequestBody Credentials credentials) {
         tweetService.likeTweet(id, credentials);

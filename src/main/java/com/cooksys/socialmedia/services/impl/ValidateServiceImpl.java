@@ -1,10 +1,15 @@
 package com.cooksys.socialmedia.services.impl;
 
+import com.cooksys.socialmedia.dtos.CredentialsDto;
+import com.cooksys.socialmedia.entities.User;
+import com.cooksys.socialmedia.exceptions.NotFoundException;
 import com.cooksys.socialmedia.repositories.HashtagRepository;
 import com.cooksys.socialmedia.repositories.UserRepository;
 import com.cooksys.socialmedia.services.ValidateService;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
+
+import static java.util.regex.Pattern.matches;
 
 /**
  * Implementation of the ValidateService.
@@ -48,5 +53,12 @@ public class ValidateServiceImpl implements ValidateService {
     @Override
     public boolean usernameAvailable(String username) {
         return !userRepository.existsByCredentialsUsername(username);
+    }
+
+
+    public User validateUser(CredentialsDto credentials) {
+        return userRepository.findByCredentialsUsernameAndDeletedFalse(credentials.getUsername())
+                .filter(user -> matches(credentials.getPassword(), user.getCredentials().getPassword()))
+                .orElseThrow(() -> new NotFoundException("Invalid credentials or user not found."));
     }
 }

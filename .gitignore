@@ -24,4 +24,5 @@ nbdist/
 .nb-gradle/
 
 application.properties
-/socialmedia-collection.http
+social-media-pman-collection.http
+socialmedia-collection.http

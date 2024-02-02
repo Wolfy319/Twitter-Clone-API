@@ -1,8 +1,10 @@
 package com.cooksys.socialmedia.services.impl;
 
+import com.cooksys.socialmedia.dtos.CredentialsDto;
 import com.cooksys.socialmedia.dtos.TweetResponseDto;
 import com.cooksys.socialmedia.dtos.UserRequestDto;
 import com.cooksys.socialmedia.dtos.UserResponseDto;
+import com.cooksys.socialmedia.embeddable.Credentials;
 import com.cooksys.socialmedia.entities.Tweet;
 import com.cooksys.socialmedia.entities.User;
 import com.cooksys.socialmedia.exceptions.BadRequestException;
@@ -22,7 +24,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.util.regex.Pattern.matches;
+import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
@@ -95,9 +101,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void followUser(String username, UserRequestDto newFollower) {
-        // TODO Auto-generated method stub
+    public void followUser(String username, UserRequestDto followerDto) {
+        User follower = userRepository.findByCredentials_Username(followerDto.getCredentials().getUsername())
+                .filter(user -> !user.isDeleted())
+                .orElseThrow(() -> new NotFoundException("Follower user not found or not active"));
 
+        User followable = userRepository.findByCredentials_Username(username)
+                .filter(user -> !user.isDeleted())
+                .orElseThrow(() -> new NotFoundException("User to follow not found or not active"));
+
+        boolean alreadyFollowing = followable.getFollowers().stream()
+                .anyMatch(existingFollower -> existingFollower.getId().equals(follower.getId()));
+
+        if (alreadyFollowing) {
+            throw new BadRequestException("The user is already following the target user");
+        }
+
+        followable.getFollowers().add(follower);
+        userRepository.save(followable);
     }
 
 	@Override
@@ -124,7 +145,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<TweetResponseDto> getFeed(String username) {
 
-        User user = userRepository.findByCredentialsUsernameAndDeletedFalse(username);
+        Optional<User> optionalUser = userRepository.findByCredentialsUsernameAndDeletedFalse(username);
+
+        if (optionalUser.isEmpty()) {
+            throw new NotFoundException("User not found or deleted");
+        }
+
+        User user = optionalUser.get();
 
         List<Tweet> userTweets = user.getTweets().stream()
                 .filter(tweet -> !tweet.isDeleted())
@@ -147,7 +174,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<TweetResponseDto> getTweets(String username) {
 
-        User user = userRepository.findByCredentials_Username(username);
+        User user = userRepository.findByCredentialsUsername(username);
 
         if (user == null) {
             throw new NotFoundException("User not found");
@@ -216,7 +243,17 @@ public class UserServiceImpl implements UserService {
 
         return followingUsers.stream()
                 .map(userMapper::entityToDto)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
+    public List<UserResponseDto> getFollowersByUsername(String username) {
+
+        User user = userRepository.findByCredentialsUsernameAndDeletedFalse(username)
+                .orElseThrow(() -> new NotFoundException("User not found with username: " + username));
+
+
+        return user.getFollowers().stream()
+                .map(userMapper::entityToDto)
+                .collect(toList());
+    }
 }
