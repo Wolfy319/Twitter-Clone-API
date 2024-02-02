@@ -37,17 +37,17 @@ public class TweetController {
     }
 
     @GetMapping("/{id}/likes")
-    public List<UserResponseDto> getLikes(@PathVariable Long id) {
+    public List<UserResponseDto> getLikes(@PathVariable long id) {
     	return tweetService.getLikes(id);
     }
 
     @GetMapping("/{id}/replies")
-    public List<TweetResponseDto> getReplies(@PathVariable Long id) {
+    public List<TweetResponseDto> getReplies(@PathVariable long id) {
     	return tweetService.getReplies(id);
     }
 
     @PostMapping("/{id}/repost")
-    public TweetResponseDto repostTweet(@PathVariable Long id, @RequestBody Credentials credentials) {
+    public TweetResponseDto repostTweet(@PathVariable long id, @RequestBody Credentials credentials) {
     	return tweetService.repostTweet(id, credentials);
     }
 
@@ -66,4 +66,13 @@ public class TweetController {
         return tweetService.getMentions(id);
     }
 
+    @PostMapping("/{id}/like")
+    public void likeTweet(@PathVariable long id, @RequestBody Credentials credentials) {
+        tweetService.likeTweet(id, credentials);
+    }
+
+    @DeleteMapping("/{id}")
+    public TweetResponseDto deleteTweet(@PathVariable long id, CredentialsDto credentials) {
+        return tweetService.deleteTweet(id, credentials);
+    }
 }

@@ -37,9 +37,7 @@ public class UserServiceImpl implements UserService {
 
         List<User> users = userRepository.findByDeletedFalse();
 
-        List<UserResponseDto> userResponseDtos = userMapper.entitiesToDtos(users);
-
-        return userResponseDtos;
+        return userMapper.entitiesToDtos(users);
     }
 
     @Override

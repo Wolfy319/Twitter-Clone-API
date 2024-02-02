@@ -1,5 +1,6 @@
 package com.cooksys.socialmedia.services.impl;
 
+import com.cooksys.socialmedia.dtos.CredentialsDto;
 import com.cooksys.socialmedia.dtos.HashtagDto;
 import com.cooksys.socialmedia.dtos.TweetResponseDto;
 import com.cooksys.socialmedia.dtos.UserResponseDto;
@@ -69,6 +70,10 @@ public class TweetServiceImpl implements TweetService {
 
         Tweet tweet = tweetRepository.findById(id).orElseThrow(() -> new NotFoundException("Tweet not found"));
 
+		if (tweet == null || tweet.isDeleted()) {
+			throw new NotFoundException("Tweet not found");
+		}
+
         return tweet.getHashtags().stream()
                 .map(hashtagMapper::entityToDto)
                 .collect(Collectors.toList());
@@ -78,6 +83,10 @@ public class TweetServiceImpl implements TweetService {
     public List<TweetResponseDto> getReposts(long id) {
 
         Tweet tweet = tweetRepository.findById(id).orElseThrow(() -> new NotFoundException("Tweet not found"));
+
+		if (tweet == null || tweet.isDeleted()) {
+			throw new NotFoundException("Tweet not found");
+		}
 
         return tweet.getReposts().stream()
                 .map(tweetMapper::entityToDto)
@@ -93,6 +102,40 @@ public class TweetServiceImpl implements TweetService {
                 .map(userMapper::entityToDto)
                 .collect(Collectors.toList());
     }
+
+	@Override
+	public void likeTweet(long id, Credentials credentials) {
+
+		Tweet tweet = tweetRepository.findById(id).orElseThrow(() -> new NotFoundException("Tweet not found"));
+
+		if (tweet.isDeleted()) {
+			throw new NotFoundException("Tweet has been deleted");
+		}
+
+		User user = userRepository.findByCredentialsUsername(credentials.getUsername());
+
+		if (user == null || user.isDeleted()) {
+			throw new NotFoundException("User not found");
+		}
+
+		tweet.getLikedByUsers().add(user);
+		user.getLikedTweets().add(tweet);
+
+		tweetRepository.save(tweet);
+		userRepository.save(user);
+	}
+
+	@Override
+	public TweetResponseDto deleteTweet(long id, CredentialsDto credentials) {
+
+		Tweet tweet = tweetRepository.findById(id).orElseThrow(() -> new NotFoundException("Tweet not found"));
+
+		tweet.setDeleted(true);
+
+		tweetRepository.saveAndFlush(tweet);
+
+		return tweetMapper.entityToDto(tweet);
+	}
 
 	@Override
 	public List<UserResponseDto> getLikes(Long id) {
@@ -113,7 +156,7 @@ public class TweetServiceImpl implements TweetService {
     @Override
 	public List<TweetResponseDto> getReplies(Long id) {
 		Tweet tweet = tweetRepository.getReferenceById(id);
-		if(tweet == null || tweet.isDeleted()) {
+		if(tweet.isDeleted()) {
 			throw new NotFoundException("Tweet does not exist");
 		}
 
@@ -132,7 +175,7 @@ public class TweetServiceImpl implements TweetService {
 		Tweet tweetToRepost = tweetRepository.getReferenceById(id);
 		if(repostingUser == null || repostingUser.getCredentials().getPassword() != credentials.getPassword()) {
 			throw new NotFoundException("User credentials do not match any existing users");
-		} else if(tweetToRepost == null || tweetToRepost.isDeleted()) {
+		} else if(tweetToRepost.isDeleted()) {
 			throw new NotFoundException("Tweet was deleted or doesn't exist");
 		}
 
