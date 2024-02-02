@@ -1,14 +1,5 @@
 package com.cooksys.socialmedia.controllers;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.cooksys.socialmedia.dtos.ContextDto;
 import com.cooksys.socialmedia.dtos.CredentialsDto;
 import com.cooksys.socialmedia.dtos.HashtagDto;
@@ -18,11 +9,15 @@ import com.cooksys.socialmedia.dtos.UserResponseDto;
 import com.cooksys.socialmedia.embeddable.Credentials;
 import com.cooksys.socialmedia.exceptions.NotFoundException;
 import com.cooksys.socialmedia.services.TweetService;
-
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -78,9 +73,9 @@ public class TweetController {
 
     @GetMapping("/{id}/context")
     public ContextDto getContext(@PathVariable Long id) {
-    	return tweetService.getContext(id);
+        return tweetService.getContext(id);
     }
-    
+
     @PostMapping("/{id}/like")
     public void likeTweet(@PathVariable Long id, @RequestBody Credentials credentials) {
         tweetService.likeTweet(id, credentials);

@@ -7,13 +7,14 @@ import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {UserMapper.class})
+@Mapper(
+    componentModel = "spring",
+    uses = {UserMapper.class})
 public interface TweetMapper {
 
-    TweetResponseDto entityToDto(Tweet tweet);
+  TweetResponseDto entityToDto(Tweet tweet);
 
-    List<TweetResponseDto> entitiesToDtos(List<Tweet> tweet);
+  List<TweetResponseDto> entitiesToDtos(List<Tweet> tweet);
 
-    Tweet dtoToEntity(TweetRequestDto tweetRequest);
-
+  Tweet dtoToEntity(TweetRequestDto tweetRequest);
 }

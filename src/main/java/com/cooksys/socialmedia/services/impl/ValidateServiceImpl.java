@@ -12,53 +12,53 @@ import lombok.RequiredArgsConstructor;
 import static java.util.regex.Pattern.matches;
 
 /**
- * Implementation of the ValidateService.
- * Provides methods to validate various aspects such as existence of hashtags and usernames.
+ * Implementation of the ValidateService. Provides methods to validate various aspects such as
+ * existence of hashtags and usernames.
  */
 @Service
 @RequiredArgsConstructor
 public class ValidateServiceImpl implements ValidateService {
 
-    private final HashtagRepository hashtagRepository;
-    private final UserRepository userRepository;
+  private final HashtagRepository hashtagRepository;
+  private final UserRepository userRepository;
 
-    /**
-     * Checks if a hashtag with the specified label exists in the database.
-     *
-     * @param label the label of the hashtag to check
-     * @return true if the hashtag exists, false otherwise
-     */
-    @Override
-    public boolean tagExists(String label) {
-        return hashtagRepository.existsByLabel(label);
-    }
+  /**
+   * Checks if a hashtag with the specified label exists in the database.
+   *
+   * @param label the label of the hashtag to check
+   * @return true if the hashtag exists, false otherwise
+   */
+  @Override
+  public boolean tagExists(String label) {
+    return hashtagRepository.existsByLabel(label);
+  }
 
-    /**
-     * Checks if a username exists in the system.
-     *
-     * @param username the username to check
-     * @return true if the username exists, false otherwise
-     */
-    @Override
-    public boolean usernameExists(String username) {
-        return userRepository.existsByCredentialsUsername(username);
-    }
+  /**
+   * Checks if a username exists in the system.
+   *
+   * @param username the username to check
+   * @return true if the username exists, false otherwise
+   */
+  @Override
+  public boolean usernameExists(String username) {
+    return userRepository.existsByCredentialsUsername(username);
+  }
 
-    /**
-     * Checks if a username is available, meaning it does not exist in the system.
-     *
-     * @param username the username to check
-     * @return true if the username is available (does not exist), false if it exists
-     */
-    @Override
-    public boolean usernameAvailable(String username) {
-        return !userRepository.existsByCredentialsUsername(username);
-    }
+  /**
+   * Checks if a username is available, meaning it does not exist in the system.
+   *
+   * @param username the username to check
+   * @return true if the username is available (does not exist), false if it exists
+   */
+  @Override
+  public boolean usernameAvailable(String username) {
+    return !userRepository.existsByCredentialsUsername(username);
+  }
 
-
-    public User validateUser(CredentialsDto credentials) {
-        return userRepository.findByCredentialsUsernameAndDeletedFalse(credentials.getUsername())
-                .filter(user -> matches(credentials.getPassword(), user.getCredentials().getPassword()))
-                .orElseThrow(() -> new NotFoundException("Invalid credentials or user not found."));
-    }
+  public User validateUser(CredentialsDto credentials) {
+    return userRepository
+        .findByCredentialsUsernameAndDeletedFalse(credentials.getUsername())
+        .filter(user -> matches(credentials.getPassword(), user.getCredentials().getPassword()))
+        .orElseThrow(() -> new NotFoundException("Invalid credentials or user not found."));
+  }
 }

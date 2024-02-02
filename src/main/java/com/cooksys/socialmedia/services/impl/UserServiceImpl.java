@@ -1,7 +1,8 @@
 package com.cooksys.socialmedia.services.impl;
 
+import static java.util.stream.Collectors.toList;
+
 import com.cooksys.socialmedia.dtos.*;
-import com.cooksys.socialmedia.embeddable.Credentials;
 import com.cooksys.socialmedia.entities.Tweet;
 import com.cooksys.socialmedia.entities.User;
 import com.cooksys.socialmedia.exceptions.BadRequestException;
@@ -11,21 +12,13 @@ import com.cooksys.socialmedia.mappers.UserMapper;
 import com.cooksys.socialmedia.repositories.TweetRepository;
 import com.cooksys.socialmedia.repositories.UserRepository;
 import com.cooksys.socialmedia.services.UserService;
-import com.cooksys.socialmedia.services.ValidateService;
 import com.cooksys.socialmedia.utils.TweetTimestampComparator;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static java.util.regex.Pattern.matches;
-import static java.util.stream.Collectors.toList;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

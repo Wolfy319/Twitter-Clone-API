@@ -1,11 +1,5 @@
 package com.cooksys.socialmedia;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
-
 import com.cooksys.socialmedia.embeddable.Credentials;
 import com.cooksys.socialmedia.embeddable.Profile;
 import com.cooksys.socialmedia.entities.Hashtag;
@@ -14,8 +8,11 @@ import com.cooksys.socialmedia.entities.User;
 import com.cooksys.socialmedia.repositories.HashtagRepository;
 import com.cooksys.socialmedia.repositories.TweetRepository;
 import com.cooksys.socialmedia.repositories.UserRepository;
-
+import java.util.Arrays;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor

@@ -7,6 +7,7 @@ import com.cooksys.socialmedia.embeddable.Profile;
 
 @Mapper(componentModel = "spring")
 public interface ProfileMapper {
-	ProfileDto entityToDto(Profile profile);
-	Profile dtoToEntity(ProfileDto profileDto);
+  ProfileDto entityToDto(Profile profile);
+
+  Profile dtoToEntity(ProfileDto profileDto);
 }

@@ -1,8 +1,7 @@
 package com.cooksys.socialmedia.utils;
 
-import java.util.Comparator;
-
 import com.cooksys.socialmedia.entities.Tweet;
+import java.util.Comparator;
 
 public class TweetTimestampComparator implements Comparator<Tweet>{
 

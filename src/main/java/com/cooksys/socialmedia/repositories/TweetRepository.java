@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface TweetRepository extends JpaRepository<Tweet, Long> {
-    List<Tweet> findByHashtagsAndDeletedFalseOrderByPostedDesc(Hashtag hashtag);
-    List<Tweet> findAllByDeletedFalseOrderByPostedDesc();
+  List<Tweet> findByHashtagsAndDeletedFalseOrderByPostedDesc(Hashtag hashtag);
 
+  List<Tweet> findAllByDeletedFalseOrderByPostedDesc();
 }
