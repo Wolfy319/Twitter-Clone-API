@@ -23,48 +23,40 @@ import lombok.NoArgsConstructor;
 @Data
 public class Tweet {
 
-	@Id
-    @GeneratedValue
-    private Long id;
+  @Id @GeneratedValue private Long id;
 
-    @ManyToOne
-    private User author;
-    
-    @CreationTimestamp
-    private Timestamp posted;
+  @ManyToOne private User author;
 
-    private boolean deleted = false;
+  @CreationTimestamp private Timestamp posted;
 
-    private String content;
+  private boolean deleted = false;
 
-    @OneToMany(mappedBy = "inReplyTo")
-    private List<Tweet> replies = new ArrayList<>();
+  private String content;
 
-    @ManyToOne
-    private Tweet inReplyTo;
+  @OneToMany(mappedBy = "inReplyTo")
+  private List<Tweet> replies = new ArrayList<>();
 
-    @OneToMany(mappedBy = "repostOf")
-    private List<Tweet> reposts = new ArrayList<>();
+  @ManyToOne private Tweet inReplyTo;
 
-    @ManyToOne
-    private Tweet repostOf;
+  @OneToMany(mappedBy = "repostOf")
+  private List<Tweet> reposts = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinTable(
-            name = "tweet_hashtags",
-            joinColumns = @JoinColumn(name = "tweet_id"),
-            inverseJoinColumns = @JoinColumn(name = "hashtag_id")
-    )
-    private List<Hashtag> hashtags = new ArrayList<>();
+  @ManyToOne private Tweet repostOf;
 
-    @ManyToMany(mappedBy = "likedTweets")
-    private List<User> likedByUsers = new ArrayList<>();
+  @ManyToMany(cascade = CascadeType.MERGE)
+  @JoinTable(
+      name = "tweet_hashtags",
+      joinColumns = @JoinColumn(name = "tweet_id"),
+      inverseJoinColumns = @JoinColumn(name = "hashtag_id"))
+  private List<Hashtag> hashtags = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_mentions",
-            joinColumns = @JoinColumn(name = "tweet_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<User> mentionedUsers = new ArrayList<>();
+  @ManyToMany(mappedBy = "likedTweets")
+  private List<User> likedByUsers = new ArrayList<>();
+
+  @ManyToMany
+  @JoinTable(
+      name = "user_mentions",
+      joinColumns = @JoinColumn(name = "tweet_id"),
+      inverseJoinColumns = @JoinColumn(name = "user_id"))
+  private List<User> mentionedUsers = new ArrayList<>();
 }

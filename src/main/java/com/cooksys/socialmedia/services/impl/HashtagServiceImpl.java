@@ -1,6 +1,8 @@
 package com.cooksys.socialmedia.services.impl;
 
 
+import static java.util.stream.Collectors.toList;
+
 import com.cooksys.socialmedia.dtos.HashtagDto;
 import com.cooksys.socialmedia.dtos.TweetResponseDto;
 import com.cooksys.socialmedia.entities.Hashtag;
@@ -9,13 +11,10 @@ import com.cooksys.socialmedia.mappers.TweetMapper;
 import com.cooksys.socialmedia.repositories.HashtagRepository;
 import com.cooksys.socialmedia.repositories.TweetRepository;
 import com.cooksys.socialmedia.services.HashtagService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
-
-import static java.util.stream.Collectors.toList;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 /**
  * Implementation of the HashtagService interface.

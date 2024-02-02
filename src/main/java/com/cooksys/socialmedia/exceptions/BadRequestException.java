@@ -1,7 +1,6 @@
 package com.cooksys.socialmedia.exceptions;
 
 import java.io.Serial;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
