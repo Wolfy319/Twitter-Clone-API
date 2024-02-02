@@ -1,5 +1,8 @@
 package com.cooksys.socialmedia.services;
 
+import com.cooksys.socialmedia.dtos.CredentialsDto;
+import com.cooksys.socialmedia.entities.User;
+
 /**
  * Service interface for validation-related operations.
  */
@@ -28,4 +31,6 @@ public interface ValidateService {
      * @return true if the username is available, false otherwise
      */
     boolean usernameAvailable(String username);
+
+    User validateUser(CredentialsDto credentials);
 }

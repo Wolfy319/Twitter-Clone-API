@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class TweetRequestDto {
-    // TODO: Waiting to implement depending on controller
 	private String content;
     private CredentialsDto credentials;
 }
