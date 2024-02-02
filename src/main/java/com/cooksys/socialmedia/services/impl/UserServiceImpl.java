@@ -247,6 +247,10 @@ public class UserServiceImpl implements UserService {
     }
 
   public UserResponseDto updateUserProfile(String username, UserRequestDto userRequestDto) {
+  	if(userRequestDto.getCredentials() == null || userRequestDto.getCredentials().getUsername() == null 
+  			|| userRequestDto.getCredentials().getPassword() == null) {
+		throw new BadRequestException("Request missing required fields");
+	}
     // Validate the user credentials
     User user = validateService.validateUser(userRequestDto.getCredentials());
 

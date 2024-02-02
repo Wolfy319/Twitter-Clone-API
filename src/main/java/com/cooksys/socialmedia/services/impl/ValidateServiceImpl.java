@@ -2,6 +2,7 @@ package com.cooksys.socialmedia.services.impl;
 
 import com.cooksys.socialmedia.dtos.CredentialsDto;
 import com.cooksys.socialmedia.entities.User;
+import com.cooksys.socialmedia.exceptions.BadRequestException;
 import com.cooksys.socialmedia.exceptions.NotFoundException;
 import com.cooksys.socialmedia.repositories.HashtagRepository;
 import com.cooksys.socialmedia.repositories.UserRepository;
