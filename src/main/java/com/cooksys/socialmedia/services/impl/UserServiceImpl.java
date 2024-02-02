@@ -13,6 +13,7 @@ import com.cooksys.socialmedia.repositories.TweetRepository;
 import com.cooksys.socialmedia.repositories.UserRepository;
 import com.cooksys.socialmedia.services.UserService;
 import com.cooksys.socialmedia.utils.TweetTimestampComparator;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -98,9 +99,24 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
-    public void unfollowUser(String username, UserRequestDto follower) {
-        // TODO Auto-generated method stub
+	@Override
+	public void unfollowUser(String username, UserRequestDto followerRequest) {
+		User user = userRepository.findByCredentialsUsername(username);
+		User userToUnfollow = userRepository.findByCredentialsUsername(followerRequest.getCredentials().getUsername());
+		if(user == null) {
+			throw new NotFoundException("Credentials provided do not match any active user");
+		} else if(userToUnfollow == null || userToUnfollow.isDeleted()) {
+			throw new NotFoundException("No such followable user exists");
+		} else if(!user.getFollowing().contains(userToUnfollow)) {
+			throw new NotFoundException("Users do not share any relationship");
+		}
+
+		List<User> following = user.getFollowing();
+		List<User> followers = userToUnfollow.getFollowers();
+		following.remove(userToUnfollow);
+		followers.remove(user);
+		userRepository.saveAndFlush(user);
+		userRepository.saveAndFlush(userToUnfollow);
 
     }
 
