@@ -7,11 +7,13 @@ import com.cooksys.socialmedia.entities.Tweet;
 import com.cooksys.socialmedia.entities.User;
 import com.cooksys.socialmedia.exceptions.BadRequestException;
 import com.cooksys.socialmedia.exceptions.NotFoundException;
+import com.cooksys.socialmedia.mappers.ProfileMapper;
 import com.cooksys.socialmedia.mappers.TweetMapper;
 import com.cooksys.socialmedia.mappers.UserMapper;
 import com.cooksys.socialmedia.repositories.TweetRepository;
 import com.cooksys.socialmedia.repositories.UserRepository;
 import com.cooksys.socialmedia.services.UserService;
+import com.cooksys.socialmedia.services.ValidateService;
 import com.cooksys.socialmedia.utils.TweetTimestampComparator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,6 +30,8 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final TweetMapper tweetMapper;
     private final TweetRepository tweetRepository;
+    private final ValidateService validateService;
+    private final ProfileMapper profileMapper;
 
     @Override
     public List<UserResponseDto> getUsers() {
@@ -72,12 +76,6 @@ public class UserServiceImpl implements UserService {
             throw new NotFoundException("User does not exist");
         }
         return userMapper.entityToDto(returnedUser);
-    }
-
-    @Override
-    public UserResponseDto updateUserProfile(String username, UserRequestDto updatedUser) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override
@@ -216,4 +214,24 @@ public class UserServiceImpl implements UserService {
                 .map(userMapper::entityToDto)
                 .collect(toList());
     }
+
+  public UserResponseDto updateUserProfile(String username, UserRequestDto userRequestDto) {
+    // Validate the user credentials
+    User user = validateService.validateUser(userRequestDto.getCredentials());
+
+    // Check if the username in path matches the username in credentials and if the user is not
+    // deleted
+    if (!user.getCredentials().getUsername().equals(username) || user.isDeleted()) {
+      throw new BadRequestException("Username mismatch or user is deleted.");
+    }
+
+    // Map and set the new profile data
+    user.setProfile(profileMapper.dtoToEntity(userRequestDto.getProfile()));
+
+    // Save the updated user
+    User updatedUser = userRepository.save(user);
+
+    // Convert the updated user entity to DTO
+    return userMapper.entityToDto(updatedUser);
+  }
 }
