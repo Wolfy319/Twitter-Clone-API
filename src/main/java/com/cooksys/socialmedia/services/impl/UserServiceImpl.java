@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -122,7 +123,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<TweetResponseDto> getFeed(String username) {
-        return List.of();
+
+        User user = userRepository.findByCredentialsUsernameAndDeletedFalse(username);
+
+        List<Tweet> userTweets = user.getTweets().stream()
+                .filter(tweet -> !tweet.isDeleted())
+                .collect(Collectors.toList());
+
+        List<User> followedUsers = user.getFollowing();
+
+        for (User followedUser : followedUsers) {
+            userTweets.addAll(followedUser.getTweets().stream()
+                    .filter(tweet -> !tweet.isDeleted())
+                    .toList());
+        }
+
+        return userTweets.stream()
+                .map(tweetMapper::entityToDto)
+                .sorted(Comparator.comparing(TweetResponseDto::getPosted).reversed())
+                .collect(Collectors.toList());
     }
 
     @Override
