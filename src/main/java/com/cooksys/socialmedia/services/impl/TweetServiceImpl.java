@@ -94,7 +94,7 @@ public class TweetServiceImpl implements TweetService {
     }
 
     @Override
-    public List<UserResponseDto> getMentions(long id) {
+    public List<UserResponseDto> getMentions(Long id) {
 
         Tweet tweet = tweetRepository.findById(id).orElseThrow(() -> new NotFoundException("Tweet not found"));
 

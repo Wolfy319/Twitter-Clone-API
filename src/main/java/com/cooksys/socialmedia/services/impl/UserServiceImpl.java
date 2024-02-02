@@ -51,16 +51,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto createUser(UserRequestDto newUserRequest) {
         User newUser = userMapper.dtoToEntity(newUserRequest);
+        if (newUser.getCredentials() == null || newUser.getCredentials().getUsername() == null 
+        		|| newUser.getCredentials().getPassword() == null || newUser.getProfile() == null
+        		|| newUser.getProfile().getEmail() == null) {
+            throw new BadRequestException("Request is missing one or more required fields");
+        }
         String username = newUser.getCredentials().getUsername();
         User existingUser = userRepository.findByCredentialsUsername(username);
         boolean userExists = existingUser != null;
         // Throw an exception if any required field is missing
-        if (username == null || newUserRequest.getCredentials().getPassword() == null
-                || newUserRequest.getProfile().getEmail() == null) {
-            throw new BadRequestException("Request is missing one or more required fields");
-        }
+
         // Throw an exception if the user exists and isn't flagged as deleted in the DB
-        else if (userExists && !existingUser.isDeleted()) {
+        if (userExists && !existingUser.isDeleted()) {
             throw new BadRequestException("User already exists");
         }
         // Reactivate user account if it exists in the DB but has been deleted
