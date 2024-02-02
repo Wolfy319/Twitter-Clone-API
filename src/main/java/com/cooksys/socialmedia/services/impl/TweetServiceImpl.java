@@ -135,6 +135,10 @@ public class TweetServiceImpl implements TweetService {
 
         Tweet tweet = tweetRepository.findById(id).orElseThrow(() -> new NotFoundException("Tweet not found"));
 
+        if (tweet.isDeleted()) {
+            throw new NotFoundException("Tweet already deleted");
+        }
+
         tweet.setDeleted(true);
 
         tweetRepository.saveAndFlush(tweet);
