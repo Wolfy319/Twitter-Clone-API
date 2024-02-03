@@ -248,7 +248,7 @@ public class UserServiceImpl implements UserService {
 
   public UserResponseDto updateUserProfile(String username, UserRequestDto userRequestDto) {
   	if(userRequestDto.getCredentials() == null || userRequestDto.getCredentials().getUsername() == null 
-  			|| userRequestDto.getCredentials().getPassword() == null) {
+  			|| userRequestDto.getCredentials().getPassword() == null || userRequestDto.getProfile() == null) {
 		throw new BadRequestException("Request missing required fields");
 	}
     // Validate the user credentials
@@ -261,12 +261,14 @@ public class UserServiceImpl implements UserService {
     }
 
     // Map and set the new profile data
-    user.setProfile(profileMapper.dtoToEntity(userRequestDto.getProfile()));
+	User updatedUser = userMapper.dtoToEntity(userRequestDto);
 
-    // Save the updated user
-    User updatedUser = userRepository.save(user);
+    if(updatedUser.getProfile().getEmail() == null && updatedUser.getProfile().getEmail() == null
+    		&& updatedUser.getProfile().getEmail() == null && updatedUser.getProfile().getEmail() == null) {
+    	updatedUser.setProfile(user.getProfile());
+    }
 
     // Convert the updated user entity to DTO
-    return userMapper.entityToDto(updatedUser);
+    return userMapper.entityToDto(userRepository.save(user));
   }
 }
