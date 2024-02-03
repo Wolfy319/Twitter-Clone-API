@@ -127,9 +127,12 @@ public class TweetServiceImpl implements TweetService {
         if (user == null || user.isDeleted()) {
             throw new NotFoundException("User not found");
         }
+        
+        if(!tweet.getLikedByUsers().contains(user)) {
+            tweet.getLikedByUsers().add(user);
+            user.getLikedTweets().add(tweet);
+        }
 
-        tweet.getLikedByUsers().add(user);
-        user.getLikedTweets().add(tweet);
 
         tweetRepository.save(tweet);
         userRepository.save(user);
@@ -235,6 +238,26 @@ public class TweetServiceImpl implements TweetService {
 
     // In TweetService
     public TweetResponseDto createTweet(TweetRequestDto tweetRequestDto) {
+        if (tweetRequestDto == null) {
+            throw new BadRequestException("The TweetRequestDto cannot be null.");
+        }
+
+        if (tweetRequestDto.getCredentials() == null) {
+            throw new BadRequestException("Credentials are required.");
+        }
+
+        if (tweetRequestDto.getCredentials().getUsername() == null || tweetRequestDto.getCredentials().getUsername().trim().isEmpty()) {
+            throw new BadRequestException("Username cannot be null or empty.");
+        }
+
+        if (tweetRequestDto.getCredentials().getPassword() == null || tweetRequestDto.getCredentials().getPassword().trim().isEmpty()) {
+            throw new BadRequestException("Password cannot be null or empty.");
+        }
+
+        if (tweetRequestDto.getContent() == null || tweetRequestDto.getContent().trim().isEmpty()) {
+            throw new BadRequestException("Tweet content cannot be null or empty.");
+        }
+
         User author = validateService.validateUser(tweetRequestDto.getCredentials());
         Tweet tweet = new Tweet();
         tweet.setAuthor(author);
