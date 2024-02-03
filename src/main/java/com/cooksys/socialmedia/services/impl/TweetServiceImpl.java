@@ -122,9 +122,12 @@ public class TweetServiceImpl implements TweetService {
         if (user == null || user.isDeleted()) {
             throw new NotFoundException("User not found");
         }
+        
+        if(!tweet.getLikedByUsers().contains(user)) {
+            tweet.getLikedByUsers().add(user);
+            user.getLikedTweets().add(tweet);
+        }
 
-        tweet.getLikedByUsers().add(user);
-        user.getLikedTweets().add(tweet);
 
         tweetRepository.save(tweet);
         userRepository.save(user);
