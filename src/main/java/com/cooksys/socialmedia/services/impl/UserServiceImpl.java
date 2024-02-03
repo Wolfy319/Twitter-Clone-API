@@ -114,12 +114,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void unfollowUser(String username, CredentialsDto followerRequest) {
-		User user = userRepository.findByCredentialsUsername(username);
+		User userToUnfollow = userRepository.findByCredentialsUsername(username);
     	if(followerRequest == null || followerRequest.getUsername() == null || followerRequest.getPassword() == null) {
     		throw new BadRequestException("Credentials include errors or were not sent");
     	}
 
-		User userToUnfollow = userRepository.findByCredentialsUsername(followerRequest.getUsername());
+		User user = userRepository.findByCredentialsUsername(followerRequest.getUsername());
 		if(user == null) {
 			throw new NotFoundException("Credentials provided do not match any active user");
 		} else if(userToUnfollow == null || userToUnfollow.isDeleted()) {
@@ -132,6 +132,8 @@ public class UserServiceImpl implements UserService {
 		List<User> followers = userToUnfollow.getFollowers();
 		following.remove(userToUnfollow);
 		followers.remove(user);
+		user.setFollowing(following);
+		userToUnfollow.setFollowers(followers);
 		userRepository.saveAndFlush(user);
 		userRepository.saveAndFlush(userToUnfollow);
 
