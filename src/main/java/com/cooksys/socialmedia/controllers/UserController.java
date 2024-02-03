@@ -80,9 +80,8 @@ public class UserController {
 	}
 
 	@GetMapping("/@{username}/followers")
-	public ResponseEntity<List<UserResponseDto>> getUserFollowers(@PathVariable String username) {
-		List<UserResponseDto> followers = userService.getFollowersByUsername(username);
-		return followers.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(followers);
+	public List<UserResponseDto> getUserFollowers(@PathVariable String username) {
+		return userService.getFollowersByUsername(username);
 	}
 	
 	@GetMapping("/@{username}/following") 
