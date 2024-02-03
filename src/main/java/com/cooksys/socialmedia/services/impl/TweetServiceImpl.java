@@ -23,6 +23,7 @@ import com.cooksys.socialmedia.repositories.UserRepository;
 import com.cooksys.socialmedia.services.TweetService;
 import com.cooksys.socialmedia.services.ValidateService;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -50,13 +51,17 @@ public class TweetServiceImpl implements TweetService {
         Tweet newTweet = new Tweet();
         newTweet.setAuthor(original.getAuthor());
         newTweet.setContent(original.getContent());
-        newTweet.setHashtags(original.getHashtags());
+
+
+        newTweet.setHashtags(new ArrayList<>(original.getHashtags()));
+        newTweet.setLikedByUsers(new ArrayList<>(original.getLikedByUsers()));
+        newTweet.setMentionedUsers(new ArrayList<>(original.getMentionedUsers()));
+        newTweet.setReplies(new ArrayList<>(original.getReplies()));
+        newTweet.setReposts(new ArrayList<>(original.getReposts()));
+
+
         newTweet.setInReplyTo(original.getInReplyTo());
-        newTweet.setLikedByUsers(original.getLikedByUsers());
-        newTweet.setMentionedUsers(original.getMentionedUsers());
-        newTweet.setReplies(original.getReplies());
         newTweet.setRepostOf(original.getRepostOf());
-        newTweet.setReposts(original.getReposts());
 
         return newTweet;
     }
@@ -182,17 +187,17 @@ public class TweetServiceImpl implements TweetService {
     public TweetResponseDto repostTweet(Long id, Credentials credentials) {
         User repostingUser = userRepository.findByCredentialsUsername(credentials.getUsername());
         Tweet tweetToRepost = tweetRepository.getReferenceById(id);
-        if (repostingUser == null || repostingUser.getCredentials().getPassword() != credentials.getPassword()) {
+        if (!repostingUser.getCredentials().getPassword().equals(credentials.getPassword())) {
             throw new NotFoundException("User credentials do not match any existing users");
         } else if (tweetToRepost.isDeleted()) {
             throw new NotFoundException("Tweet was deleted or doesn't exist");
+        } else if (repostingUser == null) {
+            throw new NotFoundException("User is not found");
         }
 
         Tweet repost = copyTweet(tweetToRepost);
         repost.setRepostOf(tweetToRepost);
-        repost.setContent(null);
-        repost.setInReplyTo(null);
-        repost.setAuthor(null);
+        repost.setAuthor(repostingUser);
 
 		return tweetMapper.entityToDto(tweetRepository.saveAndFlush(repost));
 	}
